@@ -22,10 +22,18 @@
             android:name=".AutomaticControlActivity"
             android:label="@string/title_activity_automatic_control"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape" >
-
-        <meta-data
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.vives.android.nico.thumpercontrol.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="be.vives.android.nico.thumpercontrol.MainActivity" />
         </activity>

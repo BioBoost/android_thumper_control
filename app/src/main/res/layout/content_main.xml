@@ -9,19 +9,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="About"
-        android:id="@+id/btnAbout"
-        android:textSize="20sp"
-        android:textColor="#FFFFFF"
-        android:background="#FF1744"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onAboutClick"/>
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
