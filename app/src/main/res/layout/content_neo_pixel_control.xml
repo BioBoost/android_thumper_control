@@ -10,4 +10,74 @@
     tools:showIn="@layout/activity_neo_pixel_control"
     tools:context="be.vives.android.nico.thumpercontrol.NeoPixelControlActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get NeoPixel string information"
+        android:id="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="#d70000"
+        android:layout_alignEnd="@+id/linearLayout"
+        android:padding="8dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/textView4"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="String ID:"
+            android:id="@+id/lblStringId"
+            android:paddingEnd="12dp"
+            android:layout_weight="1" />
+
+        <EditText
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/txtStringId"
+            android:text="0"
+            android:layout_weight="2"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GET"
+            android:id="@+id/btnGetStringInfo"
+            android:layout_weight="1"
+            android:onClick="onGetPixelStringInfoClick"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of Pixels:"
+            android:id="@+id/textView3"
+            android:paddingEnd="12dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/txtNumberOfPixels"
+            android:text="..."
+            android:layout_weight="1"
+            android:editable="false" />
+    </LinearLayout>
 </RelativeLayout>
