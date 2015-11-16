@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Selected settings", Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.action_neopixels:
+                startActivity(new Intent(this, NeoPixelControlActivity.class));
+                return true;
+
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;

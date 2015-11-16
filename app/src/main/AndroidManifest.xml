@@ -37,6 +37,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="be.vives.android.nico.thumpercontrol.MainActivity" />
         </activity>
+        <activity
+            android:name=".NeoPixelControlActivity"
+            android:label="@string/title_activity_neo_pixel_control"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.vives.android.nico.thumpercontrol.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -5,6 +5,9 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 
+    <item android:id="@+id/action_neopixels" android:title="@string/action_neopixels"
+        android:orderInCategory="120" app:showAsAction="never" />
+
     <item android:id="@+id/action_about" android:title="@string/action_about"
         android:orderInCategory="200" app:showAsAction="never" />
 </menu>
