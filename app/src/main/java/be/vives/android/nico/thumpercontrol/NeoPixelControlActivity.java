@@ -13,6 +13,7 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import retrofit.http.Body;
 
 public class NeoPixelControlActivity extends AppCompatActivity {
 
@@ -43,7 +44,43 @@ public class NeoPixelControlActivity extends AppCompatActivity {
                 if (response.body() != null) {
                     Log.i("REST", response.toString());
                     Log.i("REST", "ID = " + response.body().getStringId() + " COUNT = " + response.body().getNumberOfPixel());
-                    ((EditText)findViewById(R.id.txtNumberOfPixels)).setText(response.body().getNumberOfPixel());
+                    ((EditText) findViewById(R.id.txtNumberOfPixels)).setText(response.body().getNumberOfPixel());
+                } else {
+                    Log.e("REST", "Request returned no data");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("REST", t.toString());
+                Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onSetPixelColorClick(View view) {
+        Toast.makeText(this, "Doing REST request", Toast.LENGTH_SHORT).show();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.0.3:3000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        NeoPixelService service = retrofit.create(NeoPixelService.class);
+
+        String id = ((EditText)findViewById(R.id.txtStringId)).getText().toString();
+        int red = Integer.parseInt(((EditText) findViewById(R.id.txtRed)).getText().toString());
+        int green = Integer.parseInt(((EditText)findViewById(R.id.txtGreen)).getText().toString());
+        int blue = Integer.parseInt(((EditText)findViewById(R.id.txtBlue)).getText().toString());
+
+        NeoPixelStringColor color = new NeoPixelStringColor(red, green, blue);
+
+        Call<NeoPixelStringColor> callSetStringColor = service.setStringColor(id, color);
+        callSetStringColor.enqueue(new Callback<NeoPixelStringColor>() {
+            @Override
+            public void onResponse(Response<NeoPixelStringColor> response, Retrofit retrofit) {
+                if (response.body() != null) {
+                    Log.i("REST", response.toString());
                 } else {
                     Log.e("REST", "Request returned no data");
                 }
