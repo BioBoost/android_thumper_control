@@ -7,9 +7,10 @@ import retrofit.http.POST;
 import retrofit.http.Path;
 
 public interface NeoPixelService {
-    @GET("/neopixels/strings/{id}")
+    // Do NOT start path with slash !!!
+    @GET("neopixels/strings/{id}")
     Call<NeoPixelString> getResponse(@Path("id") String stringId);
 
-    @POST("/neopixels/strings/{id}")
+    @POST("neopixels/strings/{id}")
     Call<NeoPixelStringColor> setStringColor(@Path("id") String stringId, @Body NeoPixelStringColor color);
 }

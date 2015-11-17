@@ -13,9 +13,12 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-import retrofit.http.Body;
 
 public class NeoPixelControlActivity extends AppCompatActivity {
+    private static String base_url = "http://10.176.33.22:3000/";
+        // Base url must end with a slash !!!!
+    private Retrofit retrofit;
+    private NeoPixelService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +27,27 @@ public class NeoPixelControlActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(base_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(NeoPixelService.class);
     }
 
     public void onGetPixelStringInfoClick(View view) {
         Toast.makeText(this, "Doing REST request", Toast.LENGTH_SHORT).show();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.0.3:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        NeoPixelService service = retrofit.create(NeoPixelService.class);
-
+        // Params needed for request
         String id = ((EditText)findViewById(R.id.txtStringId)).getText().toString();
-        Call<NeoPixelString> callPet = service.getResponse(id);
-        callPet.enqueue(new Callback<NeoPixelString>() {
+
+        // Create call instance
+        Call<NeoPixelString> callStringInfo = service.getResponse(id);
+
+        // Call enqueue to make an asynchronous request
+        callStringInfo.enqueue(new Callback<NeoPixelString>() {
+            // On Android, callbacks will be executed on the main thread
             @Override
             public void onResponse(Response<NeoPixelString> response, Retrofit retrofit) {
                 if (response.body() != null) {
@@ -60,13 +69,6 @@ public class NeoPixelControlActivity extends AppCompatActivity {
 
     public void onSetPixelColorClick(View view) {
         Toast.makeText(this, "Doing REST request", Toast.LENGTH_SHORT).show();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.0.3:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        NeoPixelService service = retrofit.create(NeoPixelService.class);
 
         String id = ((EditText)findViewById(R.id.txtStringId)).getText().toString();
         int red = Integer.parseInt(((EditText) findViewById(R.id.txtRed)).getText().toString());
