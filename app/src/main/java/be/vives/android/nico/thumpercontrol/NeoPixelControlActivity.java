@@ -51,9 +51,10 @@ public class NeoPixelControlActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<NeoPixelString> response, Retrofit retrofit) {
                 if (response.body() != null) {
+                    NeoPixelString str = response.body();
                     Log.i("REST", response.toString());
-                    Log.i("REST", "ID = " + response.body().getStringId() + " COUNT = " + response.body().getNumberOfPixel());
-                    ((EditText) findViewById(R.id.txtNumberOfPixels)).setText(response.body().getNumberOfPixel());
+                    Log.i("REST", "ID = " + str.getStringId() + " COUNT = " + str.getNumberOfPixel());
+                    ((EditText) findViewById(R.id.txtNumberOfPixels)).setText(str.getNumberOfPixel());
                 } else {
                     Log.e("REST", "Request returned no data");
                 }
