@@ -1,11 +1,14 @@
 package be.vives.android.nico.thumpercontrol;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import retrofit.Call;
@@ -15,8 +18,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class NeoPixelControlActivity extends AppCompatActivity {
-    private static String base_url = "http://10.176.33.22:3000/";
-        // Base url must end with a slash !!!!
+    private String base_url;        // Base url must end with a slash !!!!
     private Retrofit retrofit;
     private NeoPixelService service;
 
@@ -27,6 +29,13 @@ public class NeoPixelControlActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String serverip = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_IP, "192.168.1.100");
+        String serverport = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_PORT, "3000");
+
+        base_url = "http://" + serverip + ":" + serverport + "/";
+        ((TextView)(findViewById(R.id.lblServer))).setText(base_url);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
