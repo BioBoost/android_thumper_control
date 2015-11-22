@@ -12,5 +12,10 @@ public interface NeoPixelService {
     Call<NeoPixelString> getResponse(@Path("id") String stringId);
 
     @POST("neopixels/strings/{id}")
-    Call<NeoPixelStringColor> setStringColor(@Path("id") String stringId, @Body NeoPixelStringColor color);
+    Call<StatusReport> setStringColor(@Path("id") String stringId,
+                                      @Body NeoPixelColorEffect effect);
+
+    @POST("neopixels/effects/strobe/{id}")
+    Call<StatusReport> strobe(@Path("id") String stringId,
+                              @Body NeoPixelStrobeEffect effect);
 }

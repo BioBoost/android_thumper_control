@@ -155,4 +155,48 @@
             android:onClick="onSetPixelColorClick"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Strobe"
+        android:id="@+id/textView6"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="#d70000"
+        android:padding="8dp"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_alignEnd="@+id/linearLayout3" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout4"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblDelay"
+            android:text="Delay [ms]:"
+            android:paddingEnd="12dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/txtDelay"
+            android:text="100" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Strobe"
+            android:id="@+id/btnStrobe"
+            android:onClick="onStrobeClick" />
+    </LinearLayout>
+
 </RelativeLayout>

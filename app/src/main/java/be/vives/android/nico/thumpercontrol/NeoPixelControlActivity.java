@@ -85,12 +85,42 @@ public class NeoPixelControlActivity extends AppCompatActivity {
         int green = Integer.parseInt(((EditText)findViewById(R.id.txtGreen)).getText().toString());
         int blue = Integer.parseInt(((EditText)findViewById(R.id.txtBlue)).getText().toString());
 
-        NeoPixelStringColor color = new NeoPixelStringColor(red, green, blue);
+        NeoPixelColorEffect effect = new NeoPixelColorEffect(red, green, blue);
 
-        Call<NeoPixelStringColor> callSetStringColor = service.setStringColor(id, color);
-        callSetStringColor.enqueue(new Callback<NeoPixelStringColor>() {
+        Call<StatusReport> callSetStringColor = service.setStringColor(id, effect);
+        callSetStringColor.enqueue(new Callback<StatusReport>() {
             @Override
-            public void onResponse(Response<NeoPixelStringColor> response, Retrofit retrofit) {
+            public void onResponse(Response<StatusReport> response, Retrofit retrofit) {
+                if (response.body() != null) {
+                    Log.i("REST", response.toString());
+                } else {
+                    Log.e("REST", "Request returned no data");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("REST", t.toString());
+                Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onStrobeClick(View view) {
+        Toast.makeText(this, "Doing REST request", Toast.LENGTH_SHORT).show();
+
+        String id = ((EditText)findViewById(R.id.txtStringId)).getText().toString();
+        int red = Integer.parseInt(((EditText) findViewById(R.id.txtRed)).getText().toString());
+        int green = Integer.parseInt(((EditText)findViewById(R.id.txtGreen)).getText().toString());
+        int blue = Integer.parseInt(((EditText)findViewById(R.id.txtBlue)).getText().toString());
+        byte delay = Byte.parseByte(((EditText)findViewById(R.id.txtDelay)).getText().toString());
+
+        NeoPixelStrobeEffect effect = new NeoPixelStrobeEffect(red, green, blue, delay);
+
+        Call<StatusReport> callStrobe = service.strobe(id, effect);
+        callStrobe.enqueue(new Callback<StatusReport>() {
+            @Override
+            public void onResponse(Response<StatusReport> response, Retrofit retrofit) {
                 if (response.body() != null) {
                     Log.i("REST", response.toString());
                 } else {
