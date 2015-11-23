@@ -17,7 +17,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_header_node_server"
+        android:title="@string/pref_header_trex_controller"
         android:key="pref_header_trex_controller">
         <EditTextPreference
             android:key="pref_key_trex_controller_refresh"
@@ -26,7 +26,14 @@
             android:defaultValue="500" />
     </PreferenceCategory>
 
-
-
+    <PreferenceCategory
+        android:title="@string/pref_header_neopixel_controller"
+        android:key="pref_header_neopixel_controller">
+        <EditTextPreference
+            android:key="pref_key_neopixel_controller_stringid"
+            android:summary="@string/pref_summary_neopixel_controller_stringid"
+            android:title="@string/pref_title_neopixel_controller_stringid"
+            android:defaultValue="0" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

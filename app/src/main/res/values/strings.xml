@@ -20,4 +20,8 @@
     <string name="pref_summary_trex_controller_refresh">Refresh time of drive settings (ms)</string>
     <string name="pref_title_trex_controller_refresh">Refreshtime (ms)</string>
 
+    <string name="pref_header_neopixel_controller">NeoPixel Controller</string>
+    <string name="pref_summary_neopixel_controller_stringid">String ID of NeoPixel string</string>
+    <string name="pref_title_neopixel_controller_stringid">String ID</string>
+
 </resources>
