@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onManualClick(View view) {
-        Toast.makeText(this, "Manual Drive", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ManualControlActivity.class));
     }
 
     public void onAutomaticClick(View view) {
