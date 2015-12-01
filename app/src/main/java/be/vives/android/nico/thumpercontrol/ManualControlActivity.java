@@ -2,17 +2,29 @@ package be.vives.android.nico.thumpercontrol;
 
 // Partial credits go to http://www.vogella.com/tutorials/AndroidTouch/article.html
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class ManualControlActivity extends AppCompatActivity {
     private static final int MAX_SPEED = 120;       // This should be a setting
@@ -20,6 +32,8 @@ public class ManualControlActivity extends AppCompatActivity {
 
     private boolean leftIsHeld;
     private boolean rightIsHeld;
+
+    private boolean isStopped;
 
     private int left_speed;
     private int right_speed;
@@ -44,6 +58,10 @@ public class ManualControlActivity extends AppCompatActivity {
     TextView txtThumperState;
     TextView txtLeftSpeed;
     TextView txtRightSpeed;
+
+    private String base_url;        // Base url must end with a slash !!!!
+    private Retrofit retrofit;
+    private ThumperControlRestService service;
 
     private class ThumperControlTask implements Runnable {
 
@@ -89,7 +107,14 @@ public class ManualControlActivity extends AppCompatActivity {
             }
 
             txtLeftSpeed.setText(left_speed + "");
-            txtLeftSpeed.setText(right_speed + "");
+            txtRightSpeed.setText(right_speed + "");
+
+            // Check if we can stop sending when user is not touching screen
+            if (!isStopped || (left_speed != 0) || (right_speed != 0)) {
+                sendThumperSpeed();
+            }
+
+            isStopped = (left_speed == 0 && right_speed == 0);
 
             // Repeat this same runnable code again every x milliseconds
             refreshTimer.postDelayed(thumperControlCode, REFRESH_MS);
@@ -114,12 +139,15 @@ public class ManualControlActivity extends AppCompatActivity {
 
         // Following some helpful data to have for touch
         // Get location of controls
-        left_throttle = ((ImageView)findViewById(R.id.imgLeftThrottle));
-        right_throttle = ((ImageView)findViewById(R.id.imgRightThrottle));
+        // We need to switch left and right because motors are connected wrong
+        right_throttle = ((ImageView)findViewById(R.id.imgLeftThrottle));
+        left_throttle = ((ImageView)findViewById(R.id.imgRightThrottle));
 
         txtThumperState = ((TextView)findViewById(R.id.txtThumperState));
-        txtLeftSpeed = ((TextView)findViewById(R.id.txtLeftSpeed));
-        txtRightSpeed = ((TextView)findViewById(R.id.txtRightSpeed));
+
+        // We need to switch left and right because motors are connected wrong
+        txtRightSpeed = ((TextView)findViewById(R.id.txtLeftSpeed));
+        txtLeftSpeed = ((TextView)findViewById(R.id.txtRightSpeed));
     }
 
     @Override
@@ -143,11 +171,32 @@ public class ManualControlActivity extends AppCompatActivity {
 
         // Removes pending code execution
         refreshTimer.removeCallbacks(thumperControlCode);
+
+        // Kill the Thumper
+        left_speed = 0;
+        right_speed = 0;
+        sendThumperSpeed();
+        isStopped = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String serverip = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_IP, "192.168.1.100");
+        String serverport = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_PORT, "3000");
+
+        base_url = "http://" + serverip + ":" + serverport + "/";
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(base_url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(ThumperControlRestService.class);
+
+        isStopped = true;
 
         // Schedule code for execution
         refreshTimer.post(thumperControlCode);
@@ -199,5 +248,25 @@ public class ManualControlActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public void sendThumperSpeed() {
+        ThumperSpeed speed = new ThumperSpeed(left_speed, right_speed);
+
+        Call<StatusReport> callSetThumperSpeed = service.setThumperSpeed(speed);
+        callSetThumperSpeed.enqueue(new Callback<StatusReport>() {
+            @Override
+            public void onResponse(Response<StatusReport> response, Retrofit retrofit) {
+                if (response.body() == null) {
+                    Log.e("REST", "Request returned no data");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("REST", t.toString());
+                Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
