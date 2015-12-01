@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 public class ManualControlActivity extends AppCompatActivity {
     private static final int MAX_SPEED = 120;       // This should be a setting
+    private static final int REFRESH_MS = 250;       // This should be a setting
 
     private boolean leftIsHeld;
     private boolean rightIsHeld;
@@ -23,10 +24,77 @@ public class ManualControlActivity extends AppCompatActivity {
     private int left_speed;
     private int right_speed;
 
+    private ImageView left_throttle;
+    private ImageView right_throttle;
+
+    private Rect rectLeft;
+    private Rect rectRight;
+
+    private int half_range;
+
+    // A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue.
     private Handler refreshTimer;
+
+    // Represents a command that can be executed. Often used to run code in a different Thread.
     private Runnable thumperControlCode;
 
+    // SparseArrays map integers to Objects. Like HashMap but more performant
     private SparseArray<Point> mActivePointers;
+
+    TextView txtThumperState;
+    TextView txtLeftSpeed;
+    TextView txtRightSpeed;
+
+    private class ThumperControlTask implements Runnable {
+
+        @Override
+        public void run() {
+            leftIsHeld = false;
+            rightIsHeld = false;
+
+            for (int size = mActivePointers.size(), i = 0; i < size; i++) {
+                Point point = mActivePointers.valueAt(i);
+                if (point != null) {
+                    if (rectLeft.contains(point.x, point.y)) {
+                        left_speed = calculateSpeed(rectLeft.centerY(), point.y, half_range);
+                        leftIsHeld = true;
+                    } else if (rectRight.contains(point.x, point.y)) {
+
+                        right_speed = calculateSpeed(rectLeft.centerY(), point.y, half_range);
+                        rightIsHeld = true;
+                    }
+                }
+            }
+
+            // We need to do this outside of for because of else clause
+            // which cant be determined before the full list of pointers is itterated
+            if (leftIsHeld) {
+                left_throttle.setBackgroundColor(Color.GREEN);
+            } else {
+                left_throttle.setBackgroundColor(Color.RED);
+                left_speed = 0;
+            }
+
+            if (rightIsHeld) {
+                right_throttle.setBackgroundColor(Color.GREEN);
+            } else {
+                right_throttle.setBackgroundColor(Color.RED);
+                right_speed = 0;
+            }
+
+            if (leftIsHeld || rightIsHeld) {
+                txtThumperState.setText("Hauling Ass");
+            } else {
+                txtThumperState.setText("Stopped");
+            }
+
+            txtLeftSpeed.setText(left_speed + "");
+            txtLeftSpeed.setText(right_speed + "");
+
+            // Repeat this same runnable code again every x milliseconds
+            refreshTimer.postDelayed(thumperControlCode, REFRESH_MS);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,89 +108,49 @@ public class ManualControlActivity extends AppCompatActivity {
         refreshTimer = new Handler();
 
         // Define the task to be run here
-        thumperControlCode = new Runnable() {
-            @Override
-            public void run() {
-                // Do something here on the main thread
-                if (leftIsHeld || rightIsHeld) {
-                    ((TextView)findViewById(R.id.txtThumperState)).setText("Hauling Ass");
-                } else {
-                    ((TextView)findViewById(R.id.txtThumperState)).setText("Stopped");
-                }
-
-                ((TextView)findViewById(R.id.txtLeftSpeed)).setText(left_speed + "");
-                ((TextView)findViewById(R.id.txtRightSpeed)).setText(right_speed + "");
-
-                // Following some helpful data to have for touch
-                // Get location of hold controls
-                ImageView left_throttle = ((ImageView)findViewById(R.id.imgLeftThrottle));
-                ImageView right_throttle = ((ImageView)findViewById(R.id.imgRightThrottle));
-
-                int[] l = new int[2];
-                left_throttle.getLocationOnScreen(l);
-                Rect rectLeft = new Rect(l[0], l[1], l[0] + left_throttle.getWidth(), l[1] + left_throttle.getHeight());
-
-                right_throttle.getLocationOnScreen(l);
-                Rect rectRight = new Rect(l[0], l[1], l[0] + right_throttle.getWidth(), l[1] + right_throttle.getHeight());
-
-                int half_range = Math.abs(rectLeft.top-rectLeft.bottom)/2;
-
-                leftIsHeld = false;
-                rightIsHeld = false;
-
-                for (int size = mActivePointers.size(), i = 0; i < size; i++) {
-                    Point point = mActivePointers.valueAt(i);
-                    if (point != null) {
-                        if (rectLeft.contains(point.x, point.y)) {
-                            left_speed = calculateSpeed(rectLeft.centerY(), point.y, half_range);
-                            leftIsHeld = true;
-
-                        } else if (rectRight.contains(point.x, point.y)) {
-
-                            right_speed = calculateSpeed(rectLeft.centerY(), point.y, half_range);
-                            rightIsHeld = true;
-                        }
-                    }
-                }
-
-                if (leftIsHeld) {
-                    left_throttle.setBackgroundColor(Color.GREEN);
-                } else {
-                    left_throttle.setBackgroundColor(Color.RED);
-                    left_speed = 0;
-                }
-
-                if (rightIsHeld) {
-                    right_throttle.setBackgroundColor(Color.GREEN);
-                } else {
-                    right_throttle.setBackgroundColor(Color.RED);
-                    right_speed = 0;
-                }
-
-
-
-
-
-
-
-
-                // Repeat this same runnable code again every x milliseconds
-                refreshTimer.postDelayed(thumperControlCode, 250);
-            }
-        };
-
-        // Kick off the first runnable task right away
-        refreshTimer.post(thumperControlCode);
+        thumperControlCode = new ThumperControlTask();
 
         mActivePointers = new SparseArray<Point>();
+
+        // Following some helpful data to have for touch
+        // Get location of controls
+        left_throttle = ((ImageView)findViewById(R.id.imgLeftThrottle));
+        right_throttle = ((ImageView)findViewById(R.id.imgRightThrottle));
+
+        txtThumperState = ((TextView)findViewById(R.id.txtThumperState));
+        txtLeftSpeed = ((TextView)findViewById(R.id.txtLeftSpeed));
+        txtRightSpeed = ((TextView)findViewById(R.id.txtRightSpeed));
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        // We cant do this in the onCreate as the Views have not been placed yet
+        int[] l = new int[2];
+        left_throttle.getLocationOnScreen(l);
+        rectLeft = new Rect(l[0], l[1], l[0] + left_throttle.getWidth(), l[1] + left_throttle.getHeight());
+
+        right_throttle.getLocationOnScreen(l);
+        rectRight = new Rect(l[0], l[1], l[0] + right_throttle.getWidth(), l[1] + right_throttle.getHeight());
+
+        half_range = Math.abs(rectLeft.top-rectLeft.bottom)/2;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
 
         // Removes pending code execution
         refreshTimer.removeCallbacks(thumperControlCode);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Schedule code for execution
+        refreshTimer.post(thumperControlCode);
     }
 
     private int calculateSpeed(float centerY, float yPos, int half_range) {
@@ -131,7 +159,6 @@ public class ManualControlActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         // get pointer index from the event object
         int pointerIndex = event.getActionIndex();
 
@@ -147,10 +174,10 @@ public class ManualControlActivity extends AppCompatActivity {
             case MotionEvent.ACTION_POINTER_DOWN: {
                 // We have a new pointer. Lets add it to the list of pointers
 
-                Point f = new Point();
-                f.x = (int)event.getX(pointerIndex);
-                f.y = (int)event.getY(pointerIndex);
-                mActivePointers.put(pointerId, f);
+                Point point = new Point();
+                point.x = (int)event.getX(pointerIndex);
+                point.y = (int)event.getY(pointerIndex);
+                mActivePointers.put(pointerId, point);
                 break;
             }
             case MotionEvent.ACTION_MOVE: { // a pointer was moved
@@ -172,6 +199,5 @@ public class ManualControlActivity extends AppCompatActivity {
         }
 
         return true;
-
     }
 }
