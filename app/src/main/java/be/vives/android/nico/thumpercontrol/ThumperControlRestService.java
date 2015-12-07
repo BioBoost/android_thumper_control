@@ -10,5 +10,5 @@ import retrofit.http.Path;
  */
 public interface ThumperControlRestService {
     @POST("speed")
-    Call<StatusReport> setThumperSpeed(@Body ThumperSpeed speed);
+    Call<ThumperStatusReport> setThumperSpeed(@Body ThumperSpeed speed);
 }

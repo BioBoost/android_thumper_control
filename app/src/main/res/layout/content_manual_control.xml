@@ -50,4 +50,13 @@
         android:layout_below="@+id/txtThumperState"
         android:layout_alignEnd="@+id/txtThumperState" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.0V"
+        android:id="@+id/txtBatteryVoltage"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="48sp" />
+
 </RelativeLayout>

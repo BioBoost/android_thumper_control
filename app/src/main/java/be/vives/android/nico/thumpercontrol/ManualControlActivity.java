@@ -253,12 +253,15 @@ public class ManualControlActivity extends AppCompatActivity {
     public void sendThumperSpeed() {
         ThumperSpeed speed = new ThumperSpeed(left_speed, right_speed);
 
-        Call<StatusReport> callSetThumperSpeed = service.setThumperSpeed(speed);
-        callSetThumperSpeed.enqueue(new Callback<StatusReport>() {
+        Call<ThumperStatusReport> callSetThumperSpeed = service.setThumperSpeed(speed);
+        callSetThumperSpeed.enqueue(new Callback<ThumperStatusReport>() {
             @Override
-            public void onResponse(Response<StatusReport> response, Retrofit retrofit) {
+            public void onResponse(Response<ThumperStatusReport> response, Retrofit retrofit) {
                 if (response.body() == null) {
                     Log.e("REST", "Request returned no data");
+                } else {
+                    float voltage = response.body().getBatteryVoltage();
+                    ((TextView)findViewById(R.id.txtBatteryVoltage)).setText(voltage + "V");
                 }
             }
 
