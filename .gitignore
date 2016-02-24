@@ -5,3 +5,6 @@
 .DS_Store
 /build
 /captures
+ThumperControl.iml
+android_thumper_control.iml
+app/app.iml
