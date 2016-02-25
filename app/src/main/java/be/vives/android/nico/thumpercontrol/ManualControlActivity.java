@@ -28,6 +28,8 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class ManualControlActivity extends AppCompatActivity {
+    private static final int BATTERY_VOLTAGE_REFRESH_TIME = 5000;
+
     private static final int MAX_SPEED = 255;       // This should be a setting
     private int trex_refresh_time;
     private int max_trex_speed;                     // 0 to 100%
@@ -64,6 +66,9 @@ public class ManualControlActivity extends AppCompatActivity {
     private String base_url;        // Base url must end with a slash !!!!
     private Retrofit retrofit;
     private TRexRestService service;
+
+    // Thread to get thumper battery voltage
+    private Runnable thumperBatteryVoltage;
 
     private class ThumperControlTask implements Runnable {
 
@@ -103,9 +108,9 @@ public class ManualControlActivity extends AppCompatActivity {
             }
 
             if (leftIsHeld || rightIsHeld) {
-                txtThumperState.setText("Hauling Ass");
+                txtThumperState.setText(R.string.driving);
             } else {
-                txtThumperState.setText("Stopped");
+                txtThumperState.setText(R.string.stopped);
             }
 
             txtLeftSpeed.setText(left_speed + "");
@@ -120,6 +125,16 @@ public class ManualControlActivity extends AppCompatActivity {
 
             // Repeat this same runnable code again every x milliseconds
             refreshTimer.postDelayed(thumperControlCode, trex_refresh_time);
+        }
+    }
+
+    private class ThumperBatteryVoltageTask implements Runnable {
+        @Override
+        public void run() {
+            getThumperBatteryVoltage();
+
+            // Repeat this same runnable code again every x milliseconds
+            refreshTimer.postDelayed(thumperBatteryVoltage, BATTERY_VOLTAGE_REFRESH_TIME);
         }
     }
 
@@ -150,6 +165,8 @@ public class ManualControlActivity extends AppCompatActivity {
         // We need to switch left and right because motors are connected wrong
         txtRightSpeed = ((TextView)findViewById(R.id.txtLeftSpeed));
         txtLeftSpeed = ((TextView)findViewById(R.id.txtRightSpeed));
+
+        thumperBatteryVoltage = new ThumperBatteryVoltageTask();
     }
 
     @Override
@@ -173,6 +190,7 @@ public class ManualControlActivity extends AppCompatActivity {
 
         // Removes pending code execution
         refreshTimer.removeCallbacks(thumperControlCode);
+        refreshTimer.removeCallbacks(thumperBatteryVoltage);
 
         // Kill the Thumper
         left_speed = 0;
@@ -204,6 +222,7 @@ public class ManualControlActivity extends AppCompatActivity {
 
         // Schedule code for execution
         refreshTimer.post(thumperControlCode);
+        refreshTimer.post(thumperBatteryVoltage);
     }
 
     private int calculateSpeed(float centerY, float yPos, int half_range) {
@@ -259,6 +278,24 @@ public class ManualControlActivity extends AppCompatActivity {
 
         Call<ThumperStatusReport> callSetThumperSpeed = service.setThumperSpeed(speed);
         callSetThumperSpeed.enqueue(new Callback<ThumperStatusReport>() {
+            @Override
+            public void onResponse(Response<ThumperStatusReport> response, Retrofit retrofit) {
+                if (response.body() == null) {
+                    Log.e("REST", "Request returned no data");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("REST", t.toString());
+                Toast.makeText(getApplicationContext(), "Request failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getThumperBatteryVoltage() {
+        Call<ThumperStatusReport> callGetBatteryVoltage = service.getBatteryVoltage();
+        callGetBatteryVoltage.enqueue(new Callback<ThumperStatusReport>() {
             @Override
             public void onResponse(Response<ThumperStatusReport> response, Retrofit retrofit) {
                 if (response.body() == null) {

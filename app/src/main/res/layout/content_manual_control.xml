@@ -28,7 +28,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stopped"
+        android:text="@string/stopped"
         android:id="@+id/txtThumperState"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -58,5 +58,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textSize="48sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/battery_voltage"
+        android:id="@+id/lblBatteryVoltage"
+        android:layout_above="@+id/txtBatteryVoltage"
+        android:layout_centerHorizontal="true"
+        android:singleLine="false" />
 
 </RelativeLayout>

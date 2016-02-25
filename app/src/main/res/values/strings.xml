@@ -26,8 +26,11 @@
     <string name="pref_header_neopixel_controller">NeoPixel Controller</string>
     <string name="pref_summary_neopixel_controller_stringid">String ID of NeoPixel string</string>
     <string name="pref_title_neopixel_controller_stringid">String ID</string>
-    <string name="title_activity_manual_control">ManualControlActivity</string>
+    <string name="title_activity_manual_control">Manual Control</string>
     <string name="manual_control">Manual Control</string>
     <string name="automatic_control">Automatic Control</string>
+    <string name="battery_voltage">Battery Voltage</string>
+    <string name="stopped">Stopped</string>
+    <string name="driving">Driving</string>
 
 </resources>

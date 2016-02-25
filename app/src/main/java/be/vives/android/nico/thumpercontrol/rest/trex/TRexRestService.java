@@ -2,6 +2,7 @@ package be.vives.android.nico.thumpercontrol.rest.trex;
 
 import retrofit.Call;
 import retrofit.http.Body;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**
@@ -10,4 +11,7 @@ import retrofit.http.POST;
 public interface TRexRestService {
     @POST("speed")
     Call<ThumperStatusReport> setThumperSpeed(@Body ThumperSpeed speed);
+
+    @GET("batteryvoltage")
+    Call<ThumperStatusReport> getBatteryVoltage();
 }
