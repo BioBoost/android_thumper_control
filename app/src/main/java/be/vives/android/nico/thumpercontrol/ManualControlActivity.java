@@ -14,14 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import be.vives.android.nico.thumpercontrol.rest.ThumperControlRestService;
-import be.vives.android.nico.thumpercontrol.rest.ThumperStatusReport;
+import be.vives.android.nico.thumpercontrol.rest.trex.ThumperStatusReport;
+import be.vives.android.nico.thumpercontrol.rest.trex.TRexRestService;
 import be.vives.android.nico.thumpercontrol.rest.trex.ThumperSpeed;
 import retrofit.Call;
 import retrofit.Callback;
@@ -30,8 +28,9 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class ManualControlActivity extends AppCompatActivity {
-    private static final int MAX_SPEED = 120;       // This should be a setting
-    private static final int REFRESH_MS = 250;       // This should be a setting
+    private static final int MAX_SPEED = 255;       // This should be a setting
+    private int trex_refresh_time;
+    private int max_trex_speed;                     // 0 to 100%
 
     private boolean leftIsHeld;
     private boolean rightIsHeld;
@@ -64,7 +63,7 @@ public class ManualControlActivity extends AppCompatActivity {
 
     private String base_url;        // Base url must end with a slash !!!!
     private Retrofit retrofit;
-    private ThumperControlRestService service;
+    private TRexRestService service;
 
     private class ThumperControlTask implements Runnable {
 
@@ -120,7 +119,7 @@ public class ManualControlActivity extends AppCompatActivity {
             isStopped = (left_speed == 0 && right_speed == 0);
 
             // Repeat this same runnable code again every x milliseconds
-            refreshTimer.postDelayed(thumperControlCode, REFRESH_MS);
+            refreshTimer.postDelayed(thumperControlCode, trex_refresh_time);
         }
     }
 
@@ -189,6 +188,8 @@ public class ManualControlActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String serverip = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_IP, "192.168.1.100");
         String serverport = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_PORT, "3000");
+        trex_refresh_time = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_REFRESH_TIME, "500"));
+        max_trex_speed = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_MAX_SPEED, "50"));
 
         base_url = "http://" + serverip + ":" + serverport + "/";
 
@@ -197,7 +198,7 @@ public class ManualControlActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        service = retrofit.create(ThumperControlRestService.class);
+        service = retrofit.create(TRexRestService.class);
 
         isStopped = true;
 
@@ -206,7 +207,7 @@ public class ManualControlActivity extends AppCompatActivity {
     }
 
     private int calculateSpeed(float centerY, float yPos, int half_range) {
-        return (int)(MAX_SPEED * (centerY - yPos)/half_range);
+        return (int)((MAX_SPEED * (centerY - yPos)/half_range)*max_trex_speed/100.0);
     }
 
     @Override

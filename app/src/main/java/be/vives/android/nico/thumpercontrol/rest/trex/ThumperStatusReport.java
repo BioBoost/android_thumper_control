@@ -1,4 +1,4 @@
-package be.vives.android.nico.thumpercontrol.rest;
+package be.vives.android.nico.thumpercontrol.rest.trex;
 
 import com.google.gson.annotations.Expose;
 

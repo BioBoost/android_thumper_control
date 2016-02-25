@@ -16,7 +16,7 @@ import be.vives.android.nico.thumpercontrol.rest.neopixel.NeoPixelService;
 import be.vives.android.nico.thumpercontrol.rest.neopixel.NeoPixelString;
 import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelColorEffect;
 import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelStrobeEffect;
-import be.vives.android.nico.thumpercontrol.rest.trex.StatusReport;
+import be.vives.android.nico.thumpercontrol.rest.StatusReport;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -27,6 +27,7 @@ public class NeoPixelControlActivity extends AppCompatActivity implements SeekBa
     private String base_url;        // Base url must end with a slash !!!!
     private Retrofit retrofit;
     private NeoPixelService service;
+    private String string_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,21 @@ public class NeoPixelControlActivity extends AppCompatActivity implements SeekBa
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set change listener for seekbars
+        ( (SeekBar)findViewById(R.id.seekRed)).setOnSeekBarChangeListener(this);
+        ( (SeekBar)findViewById(R.id.seekGreen)).setOnSeekBarChangeListener(this);
+        ( (SeekBar)findViewById(R.id.seekBlue)).setOnSeekBarChangeListener(this);
+        ( (SeekBar)findViewById(R.id.seekDelay)).setOnSeekBarChangeListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String serverip = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_IP, "192.168.1.100");
         String serverport = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_PORT, "3000");
+        string_id = sharedPref.getString(SettingsActivity.KEY_PREF_NEO_STRINGID, "0");
 
         base_url = "http://" + serverip + ":" + serverport + "/";
         ((TextView)(findViewById(R.id.lblServer))).setText(base_url);
@@ -49,20 +62,11 @@ public class NeoPixelControlActivity extends AppCompatActivity implements SeekBa
                 .build();
 
         service = retrofit.create(NeoPixelService.class);
-
-        // Set change listener for seekbars
-        ( (SeekBar)findViewById(R.id.seekRed)).setOnSeekBarChangeListener(this);
-        ( (SeekBar)findViewById(R.id.seekGreen)).setOnSeekBarChangeListener(this);
-        ( (SeekBar)findViewById(R.id.seekBlue)).setOnSeekBarChangeListener(this);
-        ( (SeekBar)findViewById(R.id.seekDelay)).setOnSeekBarChangeListener(this);
     }
 
     public void onGetPixelStringInfoClick(View view) {
-        // Params needed for request
-        String id = "todo";     // Should be put in settings
-
         // Create call instance
-        Call<NeoPixelString> callStringInfo = service.getResponse(id);
+        Call<NeoPixelString> callStringInfo = service.getResponse(string_id);
 
         // Call enqueue to make an asynchronous request
         callStringInfo.enqueue(new Callback<NeoPixelString>() {
@@ -88,7 +92,6 @@ public class NeoPixelControlActivity extends AppCompatActivity implements SeekBa
     }
 
     public void onSetPixelColorClick(View view) {
-        String id = "todo";     // Should be put in settings
         int red = 0;
         int green = 0;
         int blue = 0;
@@ -99,17 +102,16 @@ public class NeoPixelControlActivity extends AppCompatActivity implements SeekBa
             blue = ((SeekBar) findViewById(R.id.seekBlue)).getProgress();
         }
 
-        setColorEffect(id, red, green, blue);
+        setColorEffect(string_id, red, green, blue);
     }
 
     public void onStrobeClick(View view) {
-        String id = "todo";     // Should be put in settings
         int red = ((SeekBar) findViewById(R.id.seekRed)).getProgress();
         int green = ((SeekBar) findViewById(R.id.seekGreen)).getProgress();
         int blue = ((SeekBar) findViewById(R.id.seekBlue)).getProgress();
         int delay = ((SeekBar) findViewById(R.id.seekDelay)).getProgress();
 
-        setStrobeEffect(id, red, green, blue, delay);
+        setStrobeEffect(string_id, red, green, blue, delay);
     }
 
     private void setColorEffect(String id, int r, int g, int b) {

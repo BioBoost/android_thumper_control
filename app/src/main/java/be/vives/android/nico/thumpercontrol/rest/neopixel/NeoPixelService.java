@@ -2,7 +2,7 @@ package be.vives.android.nico.thumpercontrol.rest.neopixel;
 
 import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelColorEffect;
 import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelStrobeEffect;
-import be.vives.android.nico.thumpercontrol.rest.trex.StatusReport;
+import be.vives.android.nico.thumpercontrol.rest.StatusReport;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;
