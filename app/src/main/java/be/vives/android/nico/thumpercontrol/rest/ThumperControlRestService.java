@@ -1,5 +1,6 @@
-package be.vives.android.nico.thumpercontrol;
+package be.vives.android.nico.thumpercontrol.rest;
 
+import be.vives.android.nico.thumpercontrol.rest.trex.ThumperSpeed;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.POST;

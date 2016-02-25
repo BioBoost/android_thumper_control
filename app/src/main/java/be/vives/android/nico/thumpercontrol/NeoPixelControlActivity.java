@@ -12,6 +12,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import be.vives.android.nico.thumpercontrol.rest.neopixel.NeoPixelService;
+import be.vives.android.nico.thumpercontrol.rest.neopixel.NeoPixelString;
+import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelColorEffect;
+import be.vives.android.nico.thumpercontrol.rest.neopixel.effects.NeoPixelStrobeEffect;
+import be.vives.android.nico.thumpercontrol.rest.trex.StatusReport;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;

@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import be.vives.android.nico.thumpercontrol.rest.ThumperControlRestService;
+import be.vives.android.nico.thumpercontrol.rest.ThumperStatusReport;
+import be.vives.android.nico.thumpercontrol.rest.trex.ThumperSpeed;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
