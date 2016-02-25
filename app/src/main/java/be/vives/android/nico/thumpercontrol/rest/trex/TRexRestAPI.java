@@ -8,7 +8,7 @@ import retrofit.http.POST;
 /**
  * Created by Nico De Witte on 12/1/2015.
  */
-public interface TRexRestService {
+public interface TRexRestAPI {
     @POST("speed")
     Call<ThumperStatusReport> setThumperSpeed(@Body ThumperSpeed speed);
 

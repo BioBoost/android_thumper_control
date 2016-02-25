@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import be.vives.android.nico.thumpercontrol.rest.trex.ThumperStatusReport;
-import be.vives.android.nico.thumpercontrol.rest.trex.TRexRestService;
+import be.vives.android.nico.thumpercontrol.rest.trex.TRexRestAPI;
 import be.vives.android.nico.thumpercontrol.rest.trex.ThumperSpeed;
 import retrofit.Call;
 import retrofit.Callback;
@@ -66,7 +66,7 @@ public class ManualControlActivity extends AppCompatActivity {
 
     private String base_url;        // Base url must end with a slash !!!!
     private Retrofit retrofit;
-    private TRexRestService service;
+    private TRexRestAPI service;
 
     // Thread to get thumper battery voltage
     private Runnable thumperBatteryVoltage;
@@ -219,7 +219,7 @@ public class ManualControlActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        service = retrofit.create(TRexRestService.class);
+        service = retrofit.create(TRexRestAPI.class);
 
         isStopped = true;
 
