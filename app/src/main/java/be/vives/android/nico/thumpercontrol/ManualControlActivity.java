@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -70,8 +71,9 @@ public class ManualControlActivity extends AppCompatActivity {
     // Thread to get thumper battery voltage
     private Runnable thumperBatteryVoltage;
 
-    private class ThumperControlTask implements Runnable {
+    private float battery_voltage_threshold;
 
+    private class ThumperControlTask implements Runnable {
         @Override
         public void run() {
             leftIsHeld = false;
@@ -208,6 +210,7 @@ public class ManualControlActivity extends AppCompatActivity {
         String serverport = sharedPref.getString(SettingsActivity.KEY_PREF_NODE_PORT, "3000");
         trex_refresh_time = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_REFRESH_TIME, "500"));
         max_trex_speed = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_MAX_SPEED, "50"));
+        battery_voltage_threshold = Float.parseFloat(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_BATTERY_THRESHOLD, "7.5"));
 
         base_url = "http://" + serverip + ":" + serverport + "/";
 
@@ -302,7 +305,21 @@ public class ManualControlActivity extends AppCompatActivity {
                     Log.e("REST", "Request returned no data");
                 } else {
                     float voltage = response.body().getBatteryVoltage();
-                    ((TextView)findViewById(R.id.txtBatteryVoltage)).setText(voltage + "V");
+                    ((TextView) findViewById(R.id.txtBatteryVoltage)).setText(voltage + "V");
+
+                    if (voltage <= battery_voltage_threshold) {
+                        ((TextView) findViewById(R.id.txtBatteryVoltage)).setTextColor(getResources().getColor(R.color.battery_danger));
+                        Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                        // Vibrate for 2000 milliseconds
+                        v.vibrate(2000);
+                    } else if (voltage <= (battery_voltage_threshold + 0.2*battery_voltage_threshold)) {
+                        ((TextView) findViewById(R.id.txtBatteryVoltage)).setTextColor(getResources().getColor(R.color.battery_low));
+                        Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                        // Vibrate for 500 milliseconds
+                        v.vibrate(500);
+                    } else {
+                        ((TextView) findViewById(R.id.txtBatteryVoltage)).setTextColor(getResources().getColor(R.color.battery_ok));
+                    }
                 }
             }
 

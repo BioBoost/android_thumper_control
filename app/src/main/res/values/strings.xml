@@ -22,10 +22,13 @@
     <string name="pref_title_trex_controller_refresh">Refresh Time (ms)</string>
     <string name="pref_summary_trex_controller_max_speed">Maximum speed of Thumper</string>
     <string name="pref_title_trex_controller_max_speed">Maximum Speed (%)</string>
+    <string name="pref_summary_trex_controller_battery_voltage_threshold">Battery Voltage Threshold</string>
+    <string name="pref_title_trex_controller_battery_voltage_threshold">Battery Threshold (V)</string>
 
     <string name="pref_header_neopixel_controller">NeoPixel Controller</string>
     <string name="pref_summary_neopixel_controller_stringid">String ID of NeoPixel string</string>
     <string name="pref_title_neopixel_controller_stringid">String ID</string>
+
     <string name="title_activity_manual_control">Manual Control</string>
     <string name="manual_control">Manual Control</string>
     <string name="automatic_control">Automatic Control</string>

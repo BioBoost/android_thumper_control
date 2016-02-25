@@ -15,6 +15,8 @@ public class SettingsActivity extends PreferenceActivity {
     public static final String KEY_PREF_NEO_STRINGID = "pref_key_neopixel_controller_stringid";
     public static final String KEY_PREF_TREX_REFRESH_TIME = "pref_key_trex_controller_refresh";
     public static final String KEY_PREF_TREX_MAX_SPEED = "pref_key_trex_controller_max_speed";
+    public static final String KEY_PREF_TREX_BATTERY_THRESHOLD = "pref_key_trex_controller_battery_voltage_threshold";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

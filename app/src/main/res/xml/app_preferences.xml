@@ -29,6 +29,11 @@
             android:summary="@string/pref_summary_trex_controller_max_speed"
             android:title="@string/pref_title_trex_controller_max_speed"
             android:defaultValue="50" />
+        <EditTextPreference
+            android:key="pref_key_trex_controller_battery_voltage_threshold"
+            android:summary="@string/pref_summary_trex_controller_battery_voltage_threshold"
+            android:title="@string/pref_title_trex_controller_battery_voltage_threshold"
+            android:defaultValue="7.0" />
     </PreferenceCategory>
 
     <PreferenceCategory
