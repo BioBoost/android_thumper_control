@@ -10,25 +10,63 @@
     tools:showIn="@layout/activity_automatic_control"
     tools:context="be.vives.android.nico.thumpercontrol.AutomaticControlActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Just hold the two thumbs to drive the Thumper. Roll the smartphone on the X-axis to speed up. Turn it left and right to turn to a side."
+        android:id="@+id/txtAutomaticControlInfo"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp" />
+
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:layout_above="@+id/lblServer"
+        android:layout_alignEnd="@+id/linearLayout8">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pitch: "
-            android:id="@+id/textView" />
+            android:id="@+id/lblPitch"
+            android:layout_margin="4dp"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:id="@+id/txtPitch" />
+            android:id="@+id/txtPitch"
+            android:layout_margin="4dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout9"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignStart="@+id/linearLayout8">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roll: "
+            android:id="@+id/lblRoll"
+            android:layout_margin="4dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/txtRoll"
+            android:layout_margin="4dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,19 +74,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_margin="4dp"
+        android:id="@+id/linearLayout8">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Roll: "
-            android:id="@+id/textView2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:id="@+id/txtRoll" />
     </LinearLayout>
 
     <ImageView
@@ -70,16 +99,36 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="0"
         android:id="@+id/txtLeftMotorSpeed"
         android:layout_above="@+id/imgLeftHandle"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/imgLeftHandle"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="0"
         android:id="@+id/txtRightMotorSpeed"
         android:layout_alignBottom="@+id/txtLeftMotorSpeed"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/txtLeftMotorSpeed"
+        android:layout_alignStart="@+id/imgRightHandle"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/lblServer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:padding="4dp"
+        android:text="New Text"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

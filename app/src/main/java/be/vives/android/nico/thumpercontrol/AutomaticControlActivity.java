@@ -113,6 +113,7 @@ public class AutomaticControlActivity extends AppCompatActivity implements Orien
 //        battery_voltage_threshold = Float.parseFloat(sharedPref.getString(SettingsActivity.KEY_PREF_TREX_BATTERY_THRESHOLD, "7.5"));
 
         base_url = "http://" + serverip + ":" + serverport + "/";
+        ((TextView)(findViewById(R.id.lblServer))).setText(base_url);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
@@ -170,8 +171,8 @@ public class AutomaticControlActivity extends AppCompatActivity implements Orien
             // Indicate driving control active
             isStopped = false;
 
-            ((TextView)findViewById(R.id.txtPitch)).setText(Float.toString(pitch));
-            ((TextView)findViewById(R.id.txtRoll)).setText(Float.toString(roll));
+            ((TextView)findViewById(R.id.txtPitch)).setText(String.format("%.2f", pitch));
+            ((TextView)findViewById(R.id.txtRoll)).setText(String.format("%.2f", roll));
 
             // Calculate left and right speed here
             calculateSpeeds(pitch, roll);

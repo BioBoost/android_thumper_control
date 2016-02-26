@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView2"
                 android:src="@drawable/automatic"
-                android:layout_below="@+id/textView"
+                android:layout_below="@+id/lblPitch"
                 android:layout_centerHorizontal="true"
                 android:clickable="true"
                 android:onClick="onAutomaticClick"
