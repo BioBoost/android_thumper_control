@@ -10,38 +10,76 @@
     tools:showIn="@layout/activity_automatic_control"
     tools:context="be.vives.android.nico.thumpercontrol.AutomaticControlActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pitch"
-        android:id="@+id/lblPitch"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:paddingEnd="12dp" />
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pitch: "
+            android:id="@+id/textView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/txtPitch" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Roll: "
+            android:id="@+id/textView2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:id="@+id/txtRoll" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgLeftHandle"
+        android:src="@drawable/ic_hold_false"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgRightHandle"
+        android:src="@drawable/ic_hold_false"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="..."
-        android:id="@+id/txtPitch"
-        android:layout_alignBottom="@+id/lblPitch"
-        android:layout_toEndOf="@+id/lblPitch" />
+        android:text="New Text"
+        android:id="@+id/txtLeftMotorSpeed"
+        android:layout_above="@+id/imgLeftHandle"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Roll"
-        android:id="@+id/lblRoll"
-        android:paddingEnd="12dp"
-        android:layout_below="@+id/lblPitch"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="17dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="..."
-        android:id="@+id/txtRoll"
-        android:layout_alignBottom="@+id/lblRoll"
-        android:layout_toEndOf="@+id/lblRoll" />
+        android:text="New Text"
+        android:id="@+id/txtRightMotorSpeed"
+        android:layout_alignBottom="@+id/txtLeftMotorSpeed"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

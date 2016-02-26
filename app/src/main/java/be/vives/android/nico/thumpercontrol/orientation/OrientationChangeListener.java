@@ -1,4 +1,4 @@
-package be.vives.android.nico.thumpercontrol;
+package be.vives.android.nico.thumpercontrol.orientation;
 
 /**
  * Created by Nico De Witte on 11/16/2015.
